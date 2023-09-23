@@ -57,6 +57,13 @@ class CrossCycleLinkNode(object):
                 break
 
 
+def dance_link_warpper(head: CrossCycleLinkNode):
+    ans = []
+    dance_link(head, ans)
+
+    return ans
+
+
 def dance_link(head: CrossCycleLinkNode, answer: list):
     if head.right == head:
         return True

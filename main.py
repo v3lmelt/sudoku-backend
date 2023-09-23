@@ -1,5 +1,4 @@
 from fastapi import FastAPI
-import SudokuGenerateModule
 
 app = FastAPI()
 
