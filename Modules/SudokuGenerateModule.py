@@ -4,18 +4,38 @@ import threading
 import numpy as np
 from func_timeout import func_timeout, FunctionTimedOut
 
-from SudokuGenerateAlgorithmModule import initCol, appendRow, dance_link
+from Modules.SudokuGenerateAlgorithmModule import initCol, appendRow, dance_link
 
 '''
 生成数独部分
 '''
 syncLock = threading.Lock()
 
+# 获取格式化后的解
+def getFormattedAnswer(ans):
+    ans.sort()
+    arr = np.empty((9, 9), dtype=np.int32)
+    for row_id in ans:
+        loc = row_id // 9
+        i = loc // 9
+        j = loc % 9
+        k = row_id % 9 + 1
+        arr[i, j] = k
+    return arr
+
+# 从数独中挖空，生成数独谜题
+def removeSlotFromSudoku(sudoku, slot_count):
+    counter = 0
+    while counter < slot_count:
+        row = np.random.randint(0, 9)
+        col = np.random.randint(0, 9)
+        if sudoku[row, col] != 0:
+            sudoku[row, col] = 0
+            counter += 1
+
 
 class SudokuGenerator:
     def __init__(self):
-        self.board = np.zeros((9, 9), dtype=int)
-        self.sudoku = np.zeros((9, 9), dtype=int)
         self.counter = 0
 
     def generate(self, ansList: list):
@@ -114,25 +134,5 @@ class SudokuGenerator:
 
         return head
 
-    # 获取格式化的答案
-    def getFormattedAnswer(self, ans):
-        ans.sort()
-        arr = np.empty((9, 9), dtype=np.int32)
-        for row_id in ans:
-            loc = row_id // 9
-            i = loc // 9
-            j = loc % 9
-            k = row_id % 9 + 1
-            arr[i, j] = k
-        return arr
 
-    # 从数独中挖空，生成数独谜题
 
-    def __removeSlotFromSudoku(self, sudoku, slot_count):
-        counter = 0
-        while counter < slot_count:
-            row = np.random.randint(0, 9)
-            col = np.random.randint(0, 9)
-            if sudoku[row, col] != 0:
-                sudoku[row, col] = 0
-                counter += 1

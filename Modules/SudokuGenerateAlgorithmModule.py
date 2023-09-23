@@ -1,3 +1,8 @@
+"""
+Dance Link X Algorithm
+"""
+
+
 class CrossCycleLinkNode(object):
     def __init__(self, x, row):
         self.val = x
