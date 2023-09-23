@@ -1,22 +1,20 @@
+import json
 import threading
-import unittest
-
-from fastapi.encoders import jsonable_encoder
 
 from Modules.SudokuGenerateModule import SudokuGenerator, getFormattedAnswer
 
 
-# 多线程生成数独
-def generateSudokuService():
+def generateSudokuSeed():
     ansList = []
     threads = []
-    for x in range(10):
+    for x in range(16):
         t = SudokuGenerator()
         p = threading.Thread(target=t.generate, args=(ansList,))
         threads.append(p)
         p.start()
 
-    while len(ansList) < 9:
+    while len(ansList) < 1000:
+        print(f"Current progress: {len(ansList)} / 1000\n")
         for t in threads:
 
             # 获取线程状态，若线程已死亡则开辟新进程，直到满足9个数独的条件为止。
@@ -29,13 +27,16 @@ def generateSudokuService():
                 threads.append(p)
                 p.start()
 
-    resultDict = {}
 
+    dictToWrite = {}
     counter = 0
-    for x in ansList:
-        p = SudokuGenerator()
-        resultDict[counter] = getFormattedAnswer(x).tolist()
+    for item in ansList:
+        dictToWrite[counter] = getFormattedAnswer(item).tolist()
         counter += 1
 
-    # print(formattedResult)
-    return resultDict
+    with open("seeds.json", "w") as fd:
+        fd.write(json.dumps(dictToWrite, indent=4))
+
+
+if __name__ == '__main__':
+    generateSudokuSeed()
