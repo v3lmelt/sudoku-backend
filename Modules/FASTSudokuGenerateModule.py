@@ -9,7 +9,7 @@ import numpy as np
 from Modules.SudokuGenerateAlgorithmModule import dance_link
 from Modules.SudokuGenerateModule import getSudokuLinkList, getFormattedAnswer
 
-SEED_FILE = "../seeds.json"
+SEED_FILE = "seeds.json"
 
 
 def fastSudokuGenerate():
@@ -25,9 +25,9 @@ def fastSudokuGenerate():
     # 从中读取一个数独，注意索引应当是一个字符串
     sudoku = np.array(seedList[str(randomSelectID)])
 
-    # 选取至少30-40个数字加入locationDict中
+    # 选取至少32-35个数字加入locationDict中
     counter = 0
-    initValueCount = random.randint(30, 35)
+    initValueCount = random.randint(32, 40)
     while counter < initValueCount:
         randX = random.randint(0, 8)
         randY = random.randint(0, 8)
@@ -44,11 +44,4 @@ def fastSudokuGenerate():
 
     dance_link(head, ans)
 
-    print("生成的数独\n")
-    print(getFormattedAnswer(ans))
-
-    print("原始数独\n")
-    print(sudoku)
-
-    print("是否一致?\n")
-    print(sudoku == getFormattedAnswer(ans))
+    return getFormattedAnswer(ans)
