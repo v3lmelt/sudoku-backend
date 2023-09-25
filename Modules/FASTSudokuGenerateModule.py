@@ -9,10 +9,10 @@ import numpy as np
 from Modules.SudokuGenerateAlgorithmModule import dance_link
 from Modules.SudokuGenerateModule import getSudokuLinkList, getFormattedAnswer
 
-SEED_FILE = "seeds.json"
-
 
 def fastSudokuGenerate():
+    SEED_FILE = r"./seeds.json"
+
     locationDict = {}
     with open(SEED_FILE, "r") as fd:
 

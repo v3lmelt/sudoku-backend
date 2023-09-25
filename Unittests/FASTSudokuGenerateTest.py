@@ -9,7 +9,7 @@ class FASTSudokuGenerateTest(unittest.TestCase):
         fastSudokuGenerate()
 
     def test_fastGenerateSudokuService(self):
-        fastGenerateSudokuService()
+        print(fastGenerateSudokuService("hard"))
 
 
 if __name__ == '__main__':

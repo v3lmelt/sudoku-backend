@@ -5,12 +5,17 @@ from concurrent.futures import ThreadPoolExecutor
 from fastapi.encoders import jsonable_encoder
 
 from Modules.FASTSudokuGenerateModule import fastSudokuGenerate
-from Modules.SudokuGenerateModule import SudokuGenerator, getFormattedAnswer
+from Modules.SudokuGenerateModule import SudokuGenerator, getFormattedAnswer, removeSlotFromSudoku
 
 '''
 原始的基于Dance Link X的数独生成服务
 '''
-def generateSudokuService():
+EASY_SLOT_REMOVE = 25
+NORMAL_SLOT_REMOVE = 40
+HARD_SLOT_REMOVE = 64
+
+
+def generateSudokuService(difficulty: str):
     ansList = []
     threads = []
     for x in range(10):
@@ -32,14 +37,27 @@ def generateSudokuService():
                 threads.append(p)
                 p.start()
 
-    resultDict = {}
     formattedAnswer = []
+    result = []
 
-    counter = 0
+    # 先保存一份答案
     for x in ansList:
         formattedAnswer.append(getFormattedAnswer(x).tolist())
 
-    resultDict["sudoku"] = formattedAnswer
+    # 再根据难度从生成好的数独中挖空
+    for x in ansList:
+        arr = getFormattedAnswer(x)
+
+        if difficulty == "easy":
+            removeSlotFromSudoku(arr, slot_count=EASY_SLOT_REMOVE)
+        elif difficulty == "normal":
+            removeSlotFromSudoku(arr, slot_count=NORMAL_SLOT_REMOVE)
+        elif difficulty == "hard":
+            removeSlotFromSudoku(arr, slot_count=HARD_SLOT_REMOVE)
+
+        result.append(arr.tolist())
+
+    resultDict = {"sudoku": result, "answer": formattedAnswer}
 
     return resultDict
 
@@ -49,14 +67,17 @@ def generateSudokuService():
 '''
 
 
-def fastGenerateSudokuService():
+def fastGenerateSudokuService(difficulty: str):
     lock = threading.Lock()
     threads = []
+    generateResult = []
     result = []
+
+    answer = []
 
     def threadWork():
         with lock:
-            result.append(fastSudokuGenerate().tolist())
+            generateResult.append(fastSudokuGenerate())
 
     for x in range(10):
         t = threading.Thread(target=threadWork)
@@ -65,6 +86,22 @@ def fastGenerateSudokuService():
 
     for x in threads:
         x.join()
-    resultDict = {"sudoku": result}
+
+    # 先保存一份答案
+    for item in generateResult:
+        answer.append(item.tolist())
+
+    # # 再根据难度从生成好的数独中挖空
+    for item in generateResult:
+        if difficulty == "easy":
+            removeSlotFromSudoku(item, slot_count=EASY_SLOT_REMOVE)
+        elif difficulty == "normal":
+            removeSlotFromSudoku(item, slot_count=NORMAL_SLOT_REMOVE)
+        elif difficulty == "hard":
+            removeSlotFromSudoku(item, slot_count=HARD_SLOT_REMOVE)
+
+        result.append(item.tolist())
+
+    resultDict = {"sudoku": result, "answer": answer}
 
     return resultDict
