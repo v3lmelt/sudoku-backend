@@ -13,9 +13,9 @@ app.add_middleware(
 )
 
 
-@app.get("/sudoku-list")
-async def getSudokuList():
-    return generateSudokuService()
+@app.get("/sudoku-list/{difficulty}")
+async def getSudokuList(difficulty: str):
+    return generateSudokuService(difficulty)
 
 
 @app.get("/fast-sudoku-list/{difficulty}")
