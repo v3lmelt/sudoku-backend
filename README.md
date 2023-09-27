@@ -1,7 +1,7 @@
 # Sudoku - Backend
 本后端使用FastAPI制作。
 
-## 构建并运行
+## 运行
 `clone`之后，首先我们需要安装一些FastAPI的依赖项。
 ```
 pip install "fastapi[all]"
