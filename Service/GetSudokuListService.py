@@ -4,7 +4,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 from fastapi.encoders import jsonable_encoder
 
-from Modules.FASTSudokuGenerateModule import fastSudokuGenerate
+from Modules.FastSudokuGenerateModule import fastSudokuGenerate
 from Modules.SudokuGenerateModule import SudokuGenerator, getFormattedAnswer, removeSlotFromSudoku
 
 '''

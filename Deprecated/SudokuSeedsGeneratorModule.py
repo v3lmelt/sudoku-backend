@@ -27,7 +27,6 @@ def generateSudokuSeed():
                 threads.append(p)
                 p.start()
 
-
     dictToWrite = {}
     counter = 0
     for item in ansList:

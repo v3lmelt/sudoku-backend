@@ -90,7 +90,7 @@ class SudokuGenerator:
         self.counter = 0
 
     def generate(self, ansList: list):
-        loc_dic = self.__initLocationDict(17)
+        loc_dic = self.__initLocationDict(21)
         head = self.__getSudokuLinkList(loc_dic)
         ans = []
         try:

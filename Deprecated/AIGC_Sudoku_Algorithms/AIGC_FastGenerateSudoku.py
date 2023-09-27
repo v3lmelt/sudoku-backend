@@ -3,7 +3,7 @@ import threading
 import json
 import random
 
-from Modules.FASTSudokuGenerateModule import fastSudokuGenerate
+from Modules.FastSudokuGenerateModule import fastSudokuGenerate
 
 # 假设你的fastSudokuGenerate函数已经定义好了
 # 我们需要一个锁对象来保证线程安全
