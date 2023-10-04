@@ -2,17 +2,20 @@ import threading
 import unittest
 from concurrent.futures import ThreadPoolExecutor
 
+import numpy as np
 from fastapi.encoders import jsonable_encoder
 
 from Modules.FastSudokuGenerateModule import fastSudokuGenerate
-from Modules.SudokuGenerateModule import SudokuGenerator, getFormattedAnswer, removeSlotFromSudoku
+from Modules.SudokuGenerateAlgorithmModule import dance_link, CrossCycleLinkNode
+from Modules.SudokuGenerateModule import SudokuGenerator, getFormattedAnswer, removeSlotFromSudoku, \
+    convertSudokuArrToDict, getSudokuLinkList
 
 '''
 原始的基于Dance Link X的数独生成服务
 '''
-EASY_SLOT_REMOVE = 25
+EASY_SLOT_REMOVE = 30
 NORMAL_SLOT_REMOVE = 40
-HARD_SLOT_REMOVE = 64
+HARD_SLOT_REMOVE = 50
 
 
 def generateSudokuService(difficulty: str):
@@ -105,3 +108,58 @@ def fastGenerateSudokuService(difficulty: str):
     resultDict = {"sudoku": result, "answer": answer}
 
     return resultDict
+
+
+'''
+数独求解算法
+'''
+
+
+def getSudokuSolution(sudokuObj: list):
+    def threadWork(linkedList: CrossCycleLinkNode):
+
+        ans = []
+        res = dance_link(linkedList, ans)
+
+        if len(ans):
+            return ans
+
+    sudokuArr = sudokuObj['sudoku']
+
+    # 提交的必须是一组数独, 9个
+    if len(sudokuArr) < 9:
+        raise ValueError("Invalid sudoku array.")
+
+    # 生成线程池
+    executor = ThreadPoolExecutor(max_workers=9)
+
+    # 生成一个列表，用来保存线程的返回值
+    futureList = []
+
+    for item in sudokuArr:
+        # 先将数独转换为字典，为了进行下一步求解
+        sudokuDict = convertSudokuArrToDict(item)
+        # 生成数独链表
+        linkedList = getSudokuLinkList(sudokuDict)
+
+        # 提交任务
+        future = executor.submit(threadWork, linkedList)
+        futureList.append(future)
+
+    # 等待所有任务完成
+    executor.shutdown()
+
+    # 获取所有任务的返回值
+    ansList = []
+    for future in futureList:
+        ansList.append(future.result())
+
+    formattedList = []
+    for item in ansList:
+        if item is None:
+            raise ValueError("Invalid sudoku array.")
+
+        formattedList.append(getFormattedAnswer(item).tolist())
+
+    print(formattedList)
+    return formattedList

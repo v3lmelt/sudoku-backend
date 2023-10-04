@@ -1,6 +1,7 @@
 import random
 import threading
 
+import numpy
 import numpy as np
 from func_timeout import func_timeout, FunctionTimedOut
 
@@ -80,11 +81,25 @@ def getRowIDByCoord(x, y, num):
     return (x * 9 + y) * 9 + num - 1
 
 
+def convertSudokuArrToDict(sudoku: list):
+    # 将数独列表转化为numpy数组
+    sudoku = np.array(sudoku)
+
+    # 将数独中的数字转化为字典中的键值对
+    dict = {}
+    for x in range(9):
+        for y in range(9):
+            if sudoku[x, y] != 0:
+                dict[(x, y)] = sudoku[x, y]
+    return dict
+
 '''
 Class SudokuGenerator:
     封装数独的一些过程，封装成类方便生成方法进行一些操作。
     上方也提供了解耦后的函数，方便其他模块的设计。
 '''
+
+
 class SudokuGenerator:
     def __init__(self):
         self.counter = 0

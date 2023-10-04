@@ -2,7 +2,7 @@ import unittest
 
 from Modules.FastSudokuGenerateModule import fastSudokuGenerate
 from Modules.SudokuGenerateModule import SudokuGenerator
-from Service.GetSudokuListService import fastGenerateSudokuService, generateSudokuService
+from Service.GetSudokuListService import fastGenerateSudokuService, generateSudokuService, getSudokuSolution
 
 '''
 测试相关算法
@@ -41,3 +41,10 @@ class SudokuGenerateServiceTest(unittest.TestCase):
         fastGenerateSudokuService("easy")
         fastGenerateSudokuService("normal")
         fastGenerateSudokuService("hard")
+
+    # 测试能否正常求解数独
+
+    def test_generateSudokuSolutionService(self):
+        sudokuArr = fastGenerateSudokuService("hard")
+        getSudokuSolution(sudokuArr)
+
