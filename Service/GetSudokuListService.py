@@ -124,7 +124,8 @@ def getSudokuSolution(sudokuObj: list):
         if len(ans):
             return ans
 
-    sudokuArr = sudokuObj['sudoku']
+    print(sudokuObj)
+    sudokuArr = sudokuObj.sudoku
 
     # 提交的必须是一组数独, 9个
     if len(sudokuArr) < 9:
@@ -162,4 +163,4 @@ def getSudokuSolution(sudokuObj: list):
         formattedList.append(getFormattedAnswer(item).tolist())
 
     print(formattedList)
-    return formattedList
+    return {"answer": formattedList}

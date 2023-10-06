@@ -8,6 +8,7 @@ from Service.GetSudokuListService import fastGenerateSudokuService, generateSudo
 测试相关算法
 '''
 
+
 class SudokuGenerateAlgorithmTest(unittest.TestCase):
     # 面向对象模式的测试
     def test_generateSudokuAlgorithmOO(self):
@@ -27,8 +28,9 @@ class SudokuGenerateAlgorithmTest(unittest.TestCase):
 '''
 测试相关服务
 '''
-class SudokuGenerateServiceTest(unittest.TestCase):
 
+
+class SudokuGenerateServiceTest(unittest.TestCase):
 
     # 测试能否正常生成数独，普通接口
     def test_generateSudokuService(self):
@@ -47,4 +49,3 @@ class SudokuGenerateServiceTest(unittest.TestCase):
     def test_generateSudokuSolutionService(self):
         sudokuArr = fastGenerateSudokuService("hard")
         getSudokuSolution(sudokuArr)
-

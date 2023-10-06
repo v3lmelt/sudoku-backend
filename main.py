@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
-from Service.GetSudokuListService import generateSudokuService, fastGenerateSudokuService
+
+from Models.SudokuArrayModel import sudokuArray
+from Service.GetSudokuListService import generateSudokuService, fastGenerateSudokuService, getSudokuSolution
 
 app = FastAPI()
 
@@ -21,3 +23,8 @@ async def getSudokuList(difficulty: str):
 @app.get("/fast-sudoku-list/{difficulty}")
 async def fastGetSudokuList(difficulty: str):
     return fastGenerateSudokuService(difficulty)
+
+
+@app.post("/sudoku-answer/")
+async def getSudokuAnswer(sudoku: sudokuArray):
+    return getSudokuSolution(sudoku)
